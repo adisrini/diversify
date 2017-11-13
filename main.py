@@ -15,7 +15,7 @@ def to_color_rgb(color):
     return color_rgb(color[0], color[1], color[2])
 
 def draw_list(colors, win):
-    thickness = HEIGHT / (len(colors) - 1)
+    thickness = HEIGHT / len(colors)
     for i in range(len(colors)):
         line = Line(Point(0, i * thickness), Point(WIDTH, i * thickness))
         line.setFill(to_color_rgb(colors[i]))
@@ -29,10 +29,17 @@ def rainbow(granularity):
         ret.append((int (rgb[0] * 255), int (rgb[1] * 255), int (rgb[2] * 255)))
     return ret
 
-def main():
-    win = GraphWin("Colors", WIDTH, HEIGHT)
-    draw_list(rainbow(30), win)
-    win.getMouse()      # Pause to view result
-    win.close()         # Close window when done
+def diversify(entries):
+    return entries
 
-main()
+if __name__ == '__main__':
+    input = rainbow(50)
+    win1 = GraphWin("Input Colors", WIDTH, HEIGHT)
+    draw_list(input, win1)
+
+    win2 = GraphWin("Diversified #1", WIDTH, HEIGHT)
+    draw_list(diversify(input), win2)
+
+    win2.getMouse()      # Pause to view result
+    win1.close()         # Close windows when done
+    win2.close()
