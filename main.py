@@ -26,7 +26,7 @@ def rainbow(granularity):
     ret = []
     for i in range(granularity):
         rgb = colorsys.hsv_to_rgb(float(i) / granularity, 0.5, 1.0)
-        ret.append((int (rgb[0] * 255), int (rgb[1] * 255), int (rgb[2] * 255)))
+        ret.append((int (rgb[0] * 255), int (rgb[1] * 255), int (rgb[2] * 255), 1 - (float(i) / granularity)))
     return ret
 
 def diversify1(entries):
