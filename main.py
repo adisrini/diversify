@@ -1,15 +1,18 @@
 from graphics import *
+from collections import deque
+from copy import deepcopy
 import colorsys
+import math
 
-THRESHOLD = 10
+THRESHOLD = 5
 WIDTH = 300
 HEIGHT = 600
 
 def quantity(color):
-    return sqrt((color[0] ** 2) + (color[1] ** 2) + (color[2] ** 2))
+    return math.sqrt((color[0] ** 2) + (color[1] ** 2) + (color[2] ** 2))
 
-def is_duplicate(color_a, color_b):
-    return abs(quantity(color_a) - quantity(color_b)) > TRESHOLD
+def is_duplicate(color, existing_colors):
+    return any(map(lambda x : abs(quantity(color) - quantity(x)) > THRESHOLD, existing_colors))
 
 def to_color_rgb(color):
     return color_rgb(color[0], color[1], color[2])
@@ -29,9 +32,50 @@ def rainbow(granularity):
         ret.append((int (rgb[0] * 255), int (rgb[1] * 255), int (rgb[2] * 255), 1 - (float(i) / granularity)))
     return ret
 
-def diversify1(entries):
-    #TODO: adi
-    return entries
+DIVERSITY_THRESHOLD = 5
+
+def diversify1(input):
+    entries = deepcopy(input)
+    count = 0
+    index = 0
+    diverse_entries = []
+    duplicates = set()
+    queued_entries = deque()
+
+    while (index < len(entries)):
+        if count == DIVERSITY_THRESHOLD:
+            duplicates.clear()
+            count = 0
+        else:
+            entry_to_add = None
+            for q_entry in queued_entries:
+                if not is_duplicate(q_entry, duplicates):
+                    entry_to_add = q_entry
+                    break
+            if entry_to_add != None:
+                queued_entries.remove(entry_to_add)
+            else:
+                while (index < len(entries)):
+                    entry = entries[index]
+                    index = index + 1
+                    if not is_duplicate(entry, duplicates):
+                        entry_to_add = entry
+                        break
+                    else:
+                        queued_entries.append(entry)
+            if entry_to_add == None:
+                entry_to_add = queued_entries.popleft()
+            diverse_entries.append(entry_to_add)
+            duplicates.add(entry_to_add)
+            count = count + 1
+        if index >= len(entries) and len(queued_entries) > 0:
+            entries.clear()
+            for q_entry in queued_entries:
+                entries.append(q_entry)
+            queued_entries.clear()
+            index = 0
+
+    return diverse_entries
 
 def diversify2(entries):
     # TODO: tim
