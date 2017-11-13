@@ -82,14 +82,17 @@ def diversify2(input):
     diverse_entries = []
     duplicates = set()
     index = 0
-    dup_penalty = 0.90
-    print(entries[1])
-
-
-    
+    count = 0
+    dup_penalty = 0.8
 
     while(index < len(entries)):
+        if count == DIVERSITY_THRESHOLD:
+            print("REACHES THERS")
+            duplicates.clear()
+            count = 0
+
         current = entries[index]
+
         if is_duplicate(current, duplicates):
             if current in duplicates:
                 diverse_entries.append(current)
@@ -99,6 +102,7 @@ def diversify2(input):
                 print("penalizing dup ",current)
                 entries[index] = (entries[index][0],entries[index][1],entries[index][2],entries[index][3]*dup_penalty)
                 duplicates.add(entries[index])
+                count = count + 1
                 #TODO sort/insert
                 entries.sort(key=lambda tup:tup[3], reverse = True)
         else:
