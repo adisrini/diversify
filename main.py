@@ -29,7 +29,12 @@ def rainbow(granularity):
         ret.append((int (rgb[0] * 255), int (rgb[1] * 255), int (rgb[2] * 255)))
     return ret
 
-def diversify(entries):
+def diversify1(entries):
+    #TODO: adi
+    return entries
+
+def diversify2(entries):
+    # TODO: tim
     return entries
 
 if __name__ == '__main__':
@@ -38,8 +43,12 @@ if __name__ == '__main__':
     draw_list(input, win1)
 
     win2 = GraphWin("Diversified #1", WIDTH, HEIGHT)
-    draw_list(diversify(input), win2)
+    draw_list(diversify1(input), win2)
 
-    win2.getMouse()      # Pause to view result
+    win3 = GraphWin("Diversified #2", WIDTH, HEIGHT)
+    draw_list(diversify2(input), win3)
+
+    win3.getMouse()      # Pause to view result
     win1.close()         # Close windows when done
     win2.close()
+    win3.close()
