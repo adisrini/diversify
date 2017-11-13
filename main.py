@@ -4,7 +4,7 @@ from copy import deepcopy
 import colorsys
 import math
 
-THRESHOLD = 5
+THRESHOLD = 6
 WIDTH = 300
 HEIGHT = 600
 
