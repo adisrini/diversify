@@ -77,9 +77,39 @@ def diversify1(input):
 
     return diverse_entries
 
-def diversify2(entries):
-    # TODO: tim
-    return entries
+def diversify2(input):
+    entries = deepcopy(input)
+    diverse_entries = []
+    duplicates = set()
+    index = 0
+    dup_penalty = 0.90
+    print(entries[1])
+
+
+    
+
+    while(index < len(entries)):
+        current = entries[index]
+        if is_duplicate(current, duplicates):
+            if current in duplicates:
+                diverse_entries.append(current)
+                print("already encountered " , current)
+                index = index + 1
+            else:
+                print("penalizing dup ",current)
+                entries[index] = (entries[index][0],entries[index][1],entries[index][2],entries[index][3]*dup_penalty)
+                duplicates.add(entries[index])
+                #TODO sort/insert
+                entries.sort(key=lambda tup:tup[3], reverse = True)
+        else:
+            #add it
+            print("adding ", current)
+            diverse_entries.append(current)
+            index = index + 1
+            duplicates.add(current)
+
+
+    return diverse_entries
 
 if __name__ == '__main__':
     input = rainbow(50)
