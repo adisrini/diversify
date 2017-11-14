@@ -4,7 +4,7 @@ from copy import deepcopy
 import colorsys
 import math
 
-THRESHOLD = 6
+THRESHOLD = 30
 WIDTH = 300
 HEIGHT = 600
 
@@ -12,7 +12,7 @@ def quantity(color):
     return math.sqrt((color[0] ** 2) + (color[1] ** 2) + (color[2] ** 2))
 
 def is_duplicate(color, existing_colors):
-    return any(map(lambda x : abs(quantity(color) - quantity(x)) > THRESHOLD, existing_colors))
+    return any(map(lambda x : abs(quantity(color) - quantity(x)) < THRESHOLD, existing_colors))
 
 def to_color_rgb(color):
     return color_rgb(color[0], color[1], color[2])
@@ -28,7 +28,7 @@ def draw_list(colors, win):
 def rainbow(granularity):
     ret = []
     for i in range(granularity):
-        rgb = colorsys.hsv_to_rgb(float(i) / granularity, 0.5, 1.0)
+        rgb = colorsys.hsv_to_rgb(float(i) / granularity, 0.75, 1.0)
         ret.append((int (rgb[0] * 255), int (rgb[1] * 255), int (rgb[2] * 255), 1 - (float(i) / granularity)))
     return ret
 
@@ -87,7 +87,6 @@ def diversify2(input):
 
     while(index < len(entries)):
         if count == DIVERSITY_THRESHOLD:
-            print("REACHES THERS")
             duplicates.clear()
             count = 0
 
@@ -96,10 +95,8 @@ def diversify2(input):
         if is_duplicate(current, duplicates):
             if current in duplicates:
                 diverse_entries.append(current)
-                print("already encountered " , current)
                 index = index + 1
             else:
-                print("penalizing dup ",current)
                 entries[index] = (entries[index][0],entries[index][1],entries[index][2],entries[index][3]*dup_penalty)
                 duplicates.add(entries[index])
                 count = count + 1
@@ -107,7 +104,6 @@ def diversify2(input):
                 entries.sort(key=lambda tup:tup[3], reverse = True)
         else:
             #add it
-            print("adding ", current)
             diverse_entries.append(current)
             index = index + 1
             duplicates.add(current)
